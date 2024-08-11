@@ -3,12 +3,12 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { Contract } from "ethers";
 
 /**
- * Deploys a contract named "YourContract" using the deployer account and
+ * Deploys a contract named "SeedlessWallet" using the deployer account and
  * constructor arguments set to the deployer address
  *
  * @param hre HardhatRuntimeEnvironment object.
  */
-const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deploySeedlessWallet: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
@@ -22,10 +22,17 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("YourContract", {
+  await deploy("SeedlessWallet", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: [
+      [
+        "0x2546BcD3c84621e976D8185a91A922aE77ECEc30",
+        "0xbDA5747bFD65F08deb54cb465eB87D40e51B197E",
+        "0xdD2FD4581271e230360230F9337D5c0430Bf44C0",
+      ],
+      2,
+    ],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -33,12 +40,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
 
   // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  const SeedlessWallet = await hre.ethers.getContract<Contract>("SeedlessWallet", deployer);
+  console.log("👋 Guardian:", await SeedlessWallet.getGuardians());
 };
 
-export default deployYourContract;
+export default deploySeedlessWallet;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+// e.g. yarn deploy --tags SeedlessWallet
+deploySeedlessWallet.tags = ["SeedlessWallet"];
